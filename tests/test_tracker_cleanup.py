@@ -262,22 +262,44 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(payload["players"], [])
 
     def test_route_surface_is_tracker_only(self):
-        rules: dict[str, set[str]] = {}
-        for rule in app.app.url_map.iter_rules():
-            rules.setdefault(rule.rule, set()).update(rule.methods)
-        for removed in (
-            "/api/player/<puuid>",
-            "/api/remote-mode",
-            "/api/dodge",
-            "/api/launch-offline",
-            "/api/offline-toggle",
-            "/api/instalock",
-        ):
-            self.assertNotIn(removed, rules)
-        self.assertIn("/api/profile/<puuid>", rules)
-        self.assertIn("GET", rules["/api/matches/<match_id>/meta"])
-        self.assertIn("PUT", rules["/api/matches/<match_id>/meta"])
-        self.assertEqual(rules["/api/queue"] & {"GET", "POST", "PUT", "DELETE"}, {"GET"})
+        actual = {
+            (rule.rule, method)
+            for rule in app.app.url_map.iter_rules()
+            if rule.rule.startswith("/api/")
+            for method in rule.methods - {"HEAD", "OPTIONS"}
+        }
+        expected = {
+            ("/api/agents", "GET"),
+            ("/api/debug/reveal", "GET"),
+            ("/api/encounters", "GET"),
+            ("/api/encounters/<puuid>", "GET"),
+            ("/api/health", "GET"),
+            ("/api/insights", "GET"),
+            ("/api/inventory", "GET"),
+            ("/api/live", "GET"),
+            ("/api/match/<match_id>", "GET"),
+            ("/api/matches", "GET"),
+            ("/api/matches/<match_id>/meta", "GET"),
+            ("/api/matches/<match_id>/meta", "PUT"),
+            ("/api/performance", "GET"),
+            ("/api/players", "GET"),
+            ("/api/players/<puuid>", "GET"),
+            ("/api/profile/<puuid>", "GET"),
+            ("/api/queue", "GET"),
+            ("/api/recap", "GET"),
+            ("/api/saved-players", "GET"),
+            ("/api/saved-players/<puuid>", "DELETE"),
+            ("/api/saved-players/<puuid>", "PUT"),
+            ("/api/session/end", "POST"),
+            ("/api/session/reset", "POST"),
+            ("/api/session/start", "POST"),
+            ("/api/sessions", "GET"),
+            ("/api/sessions/<session_id>", "DELETE"),
+            ("/api/settings", "GET"),
+            ("/api/settings", "POST"),
+            ("/api/state", "GET"),
+        }
+        self.assertEqual(actual, expected)
 
     def test_profile_and_match_routes_keep_real_tracker_payloads(self):
         class FakeAuth:

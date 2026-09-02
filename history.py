@@ -160,7 +160,7 @@ def _ensure_account(puuid: str, riot_id: str | None = None,
 def record(point: dict, puuid: str | None = None, riot_id: str | None = None,
            timezone_name: str | None = None, source: str = "live") -> None:
     owner = puuid or point.get("puuid")
-    if not owner or str(owner).startswith("demo"):
+    if not owner:
         return
     with _LOCK:
         account = _ensure_account(str(owner), riot_id or point.get("riotId"), timezone_name)

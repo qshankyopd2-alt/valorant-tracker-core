@@ -9,7 +9,7 @@
 ## Boundaries
 
 - Riot operations read state only. Local writes for settings, sessions, notes, metadata, and SQLite persistence are allowed.
-- Keep game-control, Discord, remote/cloud channels, WebSocket bridges, demo data, offline-presence manipulation, telemetry, and UI code outside this repository.
+- Keep this repository limited to the REST backend, read-only Riot state, and local persistence. Build interfaces and additional transports in separate repositories.
 - Keep Riot credentials and headers transient. Never persist or log lockfile passwords, access tokens, entitlement tokens, API keys, or `Authorization` headers.
 - Treat `PUUID` as player identity. Persist Riot IDs only when confirmed by Name Service, Account API, or match detail.
 
@@ -24,7 +24,7 @@
 ## Change workflow
 
 1. Before modifying runtime code or removing a module, query Graphify repository `qshankyopd2-alt/Valorant-Scout` to locate the inherited flow and its dependencies.
-2. Trace callers before removing or changing shared Riot behavior; the cleaned local contracts remain authoritative when the Scout source contains excluded features.
+2. Trace callers before removing or changing shared Riot behavior; the cleaned local contracts remain authoritative when source behavior falls outside this scope.
 3. Preserve explicit `Victory`, `Defeat`, `Draw`, and unresolved outcomes.
 4. Add one focused regression check for non-trivial behavior, then run the full validation below.
 

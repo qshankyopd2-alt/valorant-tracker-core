@@ -10,12 +10,7 @@ A reusable, local REST JSON backend for building different VALORANT tracker inte
 - Rank, RR, peak/previous rank, K/D, HS%, win rate, inventory, skins, cards, titles, and match data
 - Persistent players, name history, matches, encounters, saved players, sessions, and metadata in SQLite
 - Offline reads from stored data
-
-## What it excludes
-
-Frontend code, Discord RPC, Ably/remote mode, WebSocket bridges, telemetry, demo data, offline-presence manipulation, Instalock, Dodge, queue control, and Scout branding.
-
-`chat_presences()` is retained because it reads Riot presence state; it is not a messaging feature. The Riot lockfile is also required for local authentication.
+- A frontend-neutral API surface for independently built interfaces
 
 ## Run
 
