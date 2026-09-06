@@ -21,10 +21,21 @@
 - `tracker_runtime.py`: presence transitions, startup reconciliation, and name retries.
 - `app.py`: thin REST JSON adapter for any future UI.
 
+## Graphify workflow
+
+Use the hosted Graphify MCP at `https://api.graphify.com/mcp` with repository `qshankyopd2-alt/valorant-tracker-core`. Do not create or use a local `graphify-out/` graph for this repository.
+
+- Before answering a codebase question, planning a change, or editing files, use the Graphify MCP for orientation before raw file search.
+- Run `recall` before acting to recover durable decisions and gotchas. Run `memories_about` when starting work on a specific file or symbol.
+- Prefer `query_graph` for scoped context. Use the exact graph tools for callers, callees, traces, references, imports/exports, file neighbors, impact, and linked tests when those relationships matter.
+- Verify graph findings against the current source and runnable tests before making or reporting a change; the graph is static evidence, not runtime verification.
+- Record durable decisions and constraints with `remember` so later agents do not have to rediscover them.
+- After pushed code changes, verify that Graphify reflects the new repository HEAD before treating its index as current.
+
 ## Change workflow
 
-1. Before modifying runtime code or removing a module, query Graphify repository `qshankyopd2-alt/Valorant-Scout` to locate the inherited flow and its dependencies.
-2. Trace callers before removing or changing shared Riot behavior; the cleaned local contracts remain authoritative when source behavior falls outside this scope.
+1. Trace callers before removing or changing shared Riot behavior; the cleaned local contracts remain authoritative when source behavior falls outside this scope.
+2. When comparison with the original Scout flow is necessary, use the source repository and pinned baseline commit documented in `README.md`; do not assume it is present in the active Graphify workspace.
 3. Preserve explicit `Victory`, `Defeat`, `Draw`, and unresolved outcomes.
 4. Add one focused regression check for non-trivial behavior, then run the full validation below.
 
